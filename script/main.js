@@ -37,7 +37,6 @@ const renderToDo = () => {
             renderToDo();
         });
         todoRemove.addEventListener('click', event => {
-            console.log(i);
             todoData.splice(i, 1);
             saveToDo();
             renderToDo();
