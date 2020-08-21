@@ -14,7 +14,6 @@ const renderToDo = () => {
     todoData.forEach((item, i) => {
         const li = document.createElement('li');
         li.classList.add('todo-item');
-
         li.insertAdjacentHTML('beforeend', `
             <span class="text-todo">${item.value}</span>
             <div class="todo-buttons">
@@ -24,9 +23,9 @@ const renderToDo = () => {
         `);
 
         if(item.completed) {
-            todoCompleted.append(li);
+            todoCompleted.prepend(li);
         } else {
-            todoList.append(li);
+            todoList.prepend(li);
         }
 
         const todoComplete = li.querySelector('.todo-complete'),
@@ -37,9 +36,9 @@ const renderToDo = () => {
             saveToDo();
             renderToDo();
         });
-        todoRemove.addEventListener('click', () => {
+        todoRemove.addEventListener('click', event => {
             console.log(i);
-            todoData.splice(todoData[i], 1);
+            todoData.splice(i, 1);
             saveToDo();
             renderToDo();
         });
