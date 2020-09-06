@@ -69,12 +69,12 @@ class ToDo {
 
             if (target.classList.contains('todo-complete')) {
                 target = target.closest('.todo-item');
-                this.completedItem(target, target.key);
+                this.animateItem(target, target.key, this.completedItem.bind(this));
             }
 
             if (target.classList.contains('todo-remove')) {
                 target = target.closest('.todo-item');
-                this.deleteItem(target, target.key);
+                this.animateItem(target, target.key, this.deleteItem.bind(this));
             }
 
             if (target.classList.contains('todo-edit')) {
@@ -84,29 +84,7 @@ class ToDo {
         });
     }
 
-    deleteItem(item, key) {
-        let idAnimateTodo,
-            count = 1;
-
-        const animate = () => {
-            idAnimateTodo = requestAnimationFrame(animate);
-
-            if (count > 0) {
-                item.style.opacity = `${count -= 0.05}`;
-            } else {
-                cancelAnimationFrame(idAnimateTodo);
-                this.todoData.delete(key);
-                this.render();
-                this.adToStorage();
-            }
-        };
-
-        animate();
-
-    }
-
-    completedItem(item, key) {
-        const elem = this.todoData.get(key);
+    animateItem(item, key, func) {
         let idAnimateTodo,
             count = 1;
 
@@ -118,10 +96,22 @@ class ToDo {
             } else {
                 cancelAnimationFrame(idAnimateTodo);
                 item.style.opacity = '';
-                this.render();
-                this.adToStorage();
+                func(key);
             }
         };
+
+        animate();
+    }
+
+    deleteItem(key) {
+        console.log(this);
+        this.todoData.delete(key);
+        this.render();
+        this.adToStorage();
+    }
+
+    completedItem(key) {
+        const elem = this.todoData.get(key);
 
         if (elem.completed) {
             elem.completed = false;
@@ -129,8 +119,8 @@ class ToDo {
             elem.completed = true;
         }
 
-        animate();
-
+        this.render();
+        this.adToStorage();
     }
 
     editItem(item, key) {
